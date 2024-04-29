@@ -37,4 +37,14 @@ it("should display error if movie doesnt exist", ()=>{
   cy.get("p").should("have.text", "Inga sökresultat att visa");
 })
 
+
+it("should display an error if movietitle is empty", ()=>{
+  cy.intercept("http:/omdbapi.com/*",{Body:[{},{}]})
+
+  cy.get("#searchText").type("{enter}");
+  cy.get("#searchText").should("be.empty");
+  cy.get("p").should("have.text","Inga sökresultat att visa");
+
+})
+
 });
