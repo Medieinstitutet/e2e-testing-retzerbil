@@ -1,3 +1,4 @@
+import { movieSort } from "./functions";
 import { IMovie } from "./models/Movie";
 import { getData } from "./services/movieService";
 
@@ -22,8 +23,10 @@ export async function handleSubmit() {
 
   try {
     movies = await getData(searchText);
-
+    
     if (movies.length > 0) {
+       //sort movies
+      movieSort(movies,true);
       createHtml(movies, container);
     } else {
       displayNoResult(container);

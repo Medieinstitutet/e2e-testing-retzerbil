@@ -16,7 +16,7 @@ describe('Intercepting omdb call testing', () => {
     cy.get("#searchText").type("yeah{enter}");
 
     cy.get(".movie").should("have.length", 2);
-    cy.get(".movie > h3:first").should("have.text", "yeah");
+    cy.get(".movie > h3:first").should("have.text", "movie");
   });
 
   it("should not show error when api connection fails", () => {
@@ -48,4 +48,19 @@ describe('Intercepting omdb call testing', () => {
     cy.get("p").should("have.text", "Inga sökresultat att visa");
 
   })
-});
+
+  it("should sort the movies alphabetically", () => {
+    cy.intercept("http://omdbapi.com/*",
+      {
+        Search: [
+          { Title: "C", Year: "2053", imdbID: "15", Type: "movie", Poster: "google.com" },
+          { Title: "A", Year: "1993", imdbID: "15", Type: "movie", Poster: "google.com" },
+          { Title: "B", Year: "1993", imdbID: "15", Type: "movie", Poster: "google.com" }]
+      })
+      cy.get("#searchText").type("A{enter}");
+      cy.get(".movie > h3").eq(0).should("have.text", "A");
+      cy.get(".movie > h3").eq(1).should("have.text", "B");
+      cy.get(".movie > h3").eq(2).should("have.text", "C");
+    
+  }
+)});
